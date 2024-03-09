@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+  rel="stylesheet"
+/>
+
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="./calstyle.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <link rel="icon" type="image/png" href="images/favicon.ico" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="calculator">
+        <form action="">
+            <div>
+                <div class="display1">
+                    <input type="text" name="display1" id="display1" value="" />
+                </div>
+                <div class="display">
+                    <input type="text" name="display" id="display" value="" />
+                </div>
+            </div>
+          <div class="buttons-container">
+            <input type="button" id="button" class="button" value="AC" onclick="clearValues(), clearValues1()" />
+            <input type="button" id="button" class="button" value="√" onclick="sqrRt()" />
+            <input type="button" id="button" class="button" value="." onclick="displayValues(value)"/>
+            <input type="button" id="button" class="button" value="/" onclick="displayValues1(value), clearValues()"/>
+          </div>
+          <div>
+            <input type="button" id="button" class="button" value="7" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="8" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="9" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="*" onclick="displayValues1(value), clearValues()"/>
+          </div>
+          <div>
+            <input type="button" id="button" class="button" value="4" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="5" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="6" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="-" onclick="displayValues1(value)"/>
+          </div>
+          <div>
+            <input type="button" id="button" class="button" value="1" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="2" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="3" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="+" onclick="displayValues1(value), clearValues()"/>
+          </div>
+          <div>
+            <button type="button" id="disableButton" class="button" onclick="nameChange()">OFF</button>
+            <input type="button" id="button" class="button" value="0" onclick="displayValues(value)" />
+            <input type="button" id="button" class="button" value="DEL" onclick="delChar()" />
+            <input class="equal" type="button" id="button"  value="=" onclick="equateValues(), clearValues1()"/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script>
+    // section for my variable declaration
+    const display = document.getElementById("display");
+    const display1 = document.getElementById("display1");
+    const disableButton = document.getElementById('disableButton');
+    let toEvaluateValue = false
+
+    // function that enanbles display on the lower screen
+    const displayValues = (value) => {
+        if(value === "." && display.value.includes("."))return;
+        if(toEvaluateValue){
+            display.value = "" 
+            toEvaluateValue = false
+        }
+        return display.value += value
+    };
+
+    // function that enanbles display on the top screen
+    const displayValues1 = (value) => {
+        if (display.value === ""){
+            return display.value += value
+        }
+        if (display.value !== ""){
+            let displayvalue = display.value + value
+        return ((display1.value += displayvalue) && (display.value = ""))
+        }
+    };
+
+    // function to delete single characters from the lower screen
+    const delChar = () => {
+      display.value = display.value.slice(0, display.value.length - 1);
+    };
+
+    // function to clear the lower screen
+    const clearValues = () => {
+        display.value = ""
+        
+    }
+
+    // function to clear the top screen
+    const clearValues1 = () =>{
+        display1.value = ""
+    }
+
+    // function to change the display on the off button 
+    const nameChange = () =>{
+        const buttons = document.querySelectorAll("input")
+        buttons.forEach(button => {
+            button.classList.toggle("disabled")
+        })
+        document.getElementById("disableButton").textContent === "ON" ? document.getElementById("disableButton").textContent = "OFF" : document.getElementById("disableButton").textContent = "ON"
+    }
+
+    // funtion that calculates squareroot
+    const sqrRt = () =>{
+        let number = display.value
+        if (number >= 0) {
+            display.value = Math.sqrt(number);
+        } else {
+            return NaN;
+        }
+        toEvaluateValue = true
+    }
+
+    // function that does my computing
+    const equateValues = () => {
+    try {
+        const result = eval(display1.value + display.value);
+        display.value = result;
+        toEvaluateValue = true
+    } catch (error) {
+        console.error("Error evaluating expression:", error);
+    }
+    };
+
+    // function that disables the whole calculator
+    const disabled = () =>{
+        const buttons = document.querySelectorAll("input")
+        buttons.forEach(button => {
+            button.classList.toggle("disabled") //here i called the disabled class from my css to be applied on all my input tags 
+        })
+    }
+
+    console.log(display);
+  </script>
+</html>
+
+
